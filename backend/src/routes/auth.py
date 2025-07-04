@@ -5,6 +5,7 @@ from flask_jwt_extended import (
 )
 from datetime import datetime, timedelta
 import re
+import json
 
 from src.models.user import User, db
 from src.models.progress import LearningAnalytics

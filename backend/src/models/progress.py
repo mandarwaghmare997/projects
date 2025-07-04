@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import uuid
 import secrets
+import json
 from src.models.user import db
 
 class UserProgress(db.Model):
