@@ -105,7 +105,8 @@ class ApiService {
     }
 
     try {
-      const response = await this.request('/api/auth/refresh', {
+      // Make direct fetch request to avoid circular dependency
+      const response = await fetch(`${this.baseURL}/api/auth/refresh`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${refreshToken}`,
@@ -113,11 +114,17 @@ class ApiService {
         },
       });
 
-      if (response.access_token) {
-        this.setToken(response.access_token);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Token refresh failed');
       }
 
-      return response;
+      if (data.access_token) {
+        this.setToken(data.access_token);
+      }
+
+      return data;
     } catch (error) {
       // Refresh failed, clear tokens
       this.setToken(null);

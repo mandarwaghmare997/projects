@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import apiService from '../services/api';
 
 const AuthContext = createContext();
@@ -15,17 +15,47 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const refreshIntervalRef = useRef(null);
 
   // Initialize authentication state
   useEffect(() => {
     initializeAuth();
+    
+    // Cleanup on unmount
+    return () => {
+      if (refreshIntervalRef.current) {
+        clearInterval(refreshIntervalRef.current);
+      }
+    };
   }, []);
+
+  // Set up automatic token refresh
+  const setupTokenRefresh = () => {
+    // Clear existing interval
+    if (refreshIntervalRef.current) {
+      clearInterval(refreshIntervalRef.current);
+    }
+
+    // Refresh token every 14 minutes (tokens expire in 15 minutes)
+    refreshIntervalRef.current = setInterval(async () => {
+      try {
+        if (apiService.isAuthenticated()) {
+          await apiService.refreshToken();
+        }
+      } catch (error) {
+        console.error('Automatic token refresh failed:', error);
+        // If refresh fails, logout user
+        await logout();
+      }
+    }, 14 * 60 * 1000); // 14 minutes
+  };
 
   const initializeAuth = async () => {
     try {
       if (apiService.isAuthenticated()) {
         const profileData = await apiService.getProfile();
         setUser(profileData.user);
+        setupTokenRefresh();
       }
     } catch (error) {
       console.error('Failed to initialize auth:', error);
@@ -43,6 +73,7 @@ export const AuthProvider = ({ children }) => {
       
       const response = await apiService.login(credentials);
       setUser(response.user);
+      setupTokenRefresh();
       
       return response;
     } catch (error) {
@@ -60,6 +91,7 @@ export const AuthProvider = ({ children }) => {
       
       const response = await apiService.register(userData);
       setUser(response.user);
+      setupTokenRefresh();
       
       return response;
     } catch (error) {
@@ -72,6 +104,12 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
+      // Clear token refresh interval
+      if (refreshIntervalRef.current) {
+        clearInterval(refreshIntervalRef.current);
+        refreshIntervalRef.current = null;
+      }
+      
       await apiService.logout();
     } catch (error) {
       console.error('Logout error:', error);
@@ -79,6 +117,10 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
       setError(null);
     }
+  };
+
+  const updateUser = (userData) => {
+    setUser(userData);
   };
 
   const updateProfile = async (profileData) => {
@@ -115,6 +157,7 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
+    updateUser,
     updateProfile,
     changePassword,
     clearError,

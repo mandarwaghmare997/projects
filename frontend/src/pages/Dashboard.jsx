@@ -28,8 +28,10 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    loadDashboardData();
-  }, []);
+    if (user) {
+      loadDashboardData();
+    }
+  }, [user]);
 
   const loadDashboardData = async () => {
     try {
@@ -108,9 +110,12 @@ const Dashboard = () => {
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <User className="h-5 w-5 text-gray-400" />
-                <span className="text-sm text-gray-700">
+                <button 
+                  onClick={() => navigate('/profile')}
+                  className="text-sm text-gray-700 hover:text-blue-600 transition-colors"
+                >
                   {user?.first_name} {user?.last_name}
-                </span>
+                </button>
               </div>
               <Button 
                 variant="outline" 
