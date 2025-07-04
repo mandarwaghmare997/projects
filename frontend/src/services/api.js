@@ -6,12 +6,15 @@ const API_BASE_URL = process.env.NODE_ENV === 'production'
 class ApiService {
   constructor() {
     this.baseURL = API_BASE_URL;
-    this.token = localStorage.getItem('access_token');
+  }
+
+  // Get current token from localStorage
+  get token() {
+    return localStorage.getItem('access_token');
   }
 
   // Set authentication token
   setToken(token) {
-    this.token = token;
     if (token) {
       localStorage.setItem('access_token', token);
     } else {

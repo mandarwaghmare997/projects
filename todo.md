@@ -48,8 +48,8 @@
 - [x] Build user dashboard with progress tracking
 - [x] Implement course enrollment functionality
 - [x] Create course detail pages with modules
-- [ ] Add user profile management
-- [ ] Implement session management and token refresh
+- [x] Add user profile management
+- [x] Implement session management and token refresh
 
 ## Phase 5: Build quiz system with instant scoring
 - [x] Create interactive quiz interface
