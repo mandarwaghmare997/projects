@@ -190,6 +190,14 @@ class ApiService {
   }
 
   // Quiz methods
+  async getAllQuizzes() {
+    return this.request('/api/quizzes/', { auth: false });
+  }
+
+  async getCourseQuizzes(courseId) {
+    return this.request(`/api/courses/${courseId}/quizzes`, { auth: false });
+  }
+
   async getModuleQuizzes(moduleId) {
     return this.request(`/api/quizzes/module/${moduleId}`);
   }
@@ -204,6 +212,13 @@ class ApiService {
     });
   }
 
+  async submitQuizAttempt(quizId, attemptData) {
+    return this.request(`/api/quizzes/${quizId}/submit`, {
+      method: 'POST',
+      body: JSON.stringify(attemptData),
+    });
+  }
+
   async submitQuiz(attemptId, answers) {
     return this.request(`/api/quizzes/attempts/${attemptId}/submit`, {
       method: 'POST',
@@ -213,6 +228,10 @@ class ApiService {
 
   async getQuizResults(attemptId) {
     return this.request(`/api/quizzes/attempts/${attemptId}/results`);
+  }
+
+  async getUserQuizAttempts() {
+    return this.request('/api/quizzes/my-attempts');
   }
 
   async getMyQuizAttempts() {

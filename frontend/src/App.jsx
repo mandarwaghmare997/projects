@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import AuthPage from './pages/AuthPage';
 import Dashboard from './pages/Dashboard';
+import QuizPage from './pages/QuizPage';
 import './App.css';
 
 // Protected Route Component
@@ -385,6 +386,22 @@ const AppContent = () => {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/quizzes" 
+          element={
+            <ProtectedRoute>
+              <QuizPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/course/:courseId/quizzes" 
+          element={
+            <ProtectedRoute>
+              <QuizPage />
             </ProtectedRoute>
           } 
         />

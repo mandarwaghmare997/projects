@@ -9,6 +9,92 @@ from src.models.progress import LearningAnalytics
 
 quizzes_bp = Blueprint('quizzes', __name__)
 
+@quizzes_bp.route('/', methods=['GET'])
+def get_all_quizzes():
+    """Get all available quizzes (public endpoint)"""
+    try:
+        quizzes = Quiz.query.filter_by(is_active=True).all()
+        
+        quizzes_data = []
+        for quiz in quizzes:
+            quiz_data = quiz.to_dict()
+            # Add some basic stats
+            quiz_data['question_count'] = len(quiz.questions)
+            quiz_data['stats'] = {
+                'total_attempts': QuizAttempt.query.filter_by(quiz_id=quiz.id).count(),
+                'average_score': quiz.get_average_score()
+            }
+            quizzes_data.append(quiz_data)
+        
+        return jsonify(quizzes_data), 200
+        
+    except Exception as e:
+        current_app.logger.error(f"Get all quizzes error: {str(e)}")
+        return jsonify({'error': 'Failed to get quizzes'}), 500
+
+@quizzes_bp.route('/<int:quiz_id>/submit', methods=['POST'])
+@jwt_required()
+def submit_quiz_attempt(quiz_id):
+    """Submit quiz attempt directly (alternative to attempt-based submission)"""
+    try:
+        current_user_id = get_jwt_identity()
+        data = request.get_json()
+        
+        quiz = Quiz.query.get(quiz_id)
+        if not quiz or not quiz.is_active:
+            return jsonify({'error': 'Quiz not found'}), 404
+        
+        # Check if user can attempt
+        if not quiz.can_attempt(current_user_id):
+            return jsonify({'error': 'Maximum attempts reached'}), 400
+        
+        answers = data.get('answers', {})
+        time_taken = data.get('time_taken', 0)
+        
+        # Create and complete attempt in one go
+        attempt = QuizAttempt.create_and_complete(
+            user_id=current_user_id,
+            quiz_id=quiz_id,
+            answers=answers,
+            time_taken_seconds=time_taken
+        )
+        
+        if not attempt:
+            return jsonify({'error': 'Failed to submit quiz'}), 500
+        
+        # Log quiz completion event
+        LearningAnalytics.log_event(
+            user_id=current_user_id,
+            event_type='quiz_completed',
+            event_data={
+                'quiz_id': quiz_id,
+                'attempt_id': attempt.id,
+                'score': attempt.score,
+                'passed': attempt.passed,
+                'time_taken_minutes': attempt.time_taken_minutes
+            },
+            ip_address=request.remote_addr,
+            user_agent=request.headers.get('User-Agent')
+        )
+        
+        # Return detailed results
+        results = {
+            'score': attempt.score,
+            'passed': attempt.passed,
+            'correct_answers': attempt.correct_answers,
+            'total_questions': len(quiz.questions),
+            'time_taken': time_taken,
+            'feedback': attempt.get_feedback(),
+            'attempt_id': attempt.id
+        }
+        
+        return jsonify(results), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Submit quiz attempt error: {str(e)}")
+        return jsonify({'error': 'Failed to submit quiz'}), 500
+
 @quizzes_bp.route('/module/<int:module_id>', methods=['GET'])
 @jwt_required()
 def get_module_quizzes(module_id):

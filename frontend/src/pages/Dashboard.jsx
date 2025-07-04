@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import apiService from '../services/api';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
@@ -14,11 +15,13 @@ import {
   CheckCircle,
   Star,
   Calendar,
-  Target
+  Target,
+  Brain
 } from 'lucide-react';
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState(null);
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -181,6 +184,45 @@ const Dashboard = () => {
                   <p className="text-2xl font-bold text-gray-900">{Math.round(overview.completion_rate || 0)}%</p>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/quizzes')}>
+            <CardContent className="p-6 text-center">
+              <Brain className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Take Quizzes</h3>
+              <p className="text-gray-600 mb-4">Test your knowledge and earn certifications</p>
+              <Button className="w-full">
+                <Play className="h-4 w-4 mr-2" />
+                Start Quiz
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardContent className="p-6 text-center">
+              <Award className="h-12 w-12 text-yellow-600 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">My Certificates</h3>
+              <p className="text-gray-600 mb-4">View and download your earned certificates</p>
+              <Button variant="outline" className="w-full">
+                <Award className="h-4 w-4 mr-2" />
+                View Certificates
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardContent className="p-6 text-center">
+              <Target className="h-12 w-12 text-green-600 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Learning Path</h3>
+              <p className="text-gray-600 mb-4">Follow your personalized learning journey</p>
+              <Button variant="outline" className="w-full">
+                <Target className="h-4 w-4 mr-2" />
+                View Path
+              </Button>
             </CardContent>
           </Card>
         </div>

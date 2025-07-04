@@ -4,6 +4,7 @@ from datetime import datetime
 
 from src.models.user import User, db
 from src.models.course import Course, Module, CourseEnrollment
+from src.models.quiz import Quiz, QuizAttempt
 from src.models.progress import UserProgress, LearningAnalytics
 
 courses_bp = Blueprint('courses', __name__)
@@ -44,6 +45,37 @@ def get_course(course_id):
     except Exception as e:
         current_app.logger.error(f"Get course error: {str(e)}")
         return jsonify({'error': 'Failed to get course'}), 500
+
+@courses_bp.route('/<int:course_id>/quizzes', methods=['GET'])
+def get_course_quizzes(course_id):
+    """Get all quizzes for a course"""
+    try:
+        course = Course.query.get(course_id)
+        if not course or not course.is_active:
+            return jsonify({'error': 'Course not found'}), 404
+        
+        # Get quizzes for this course (through modules)
+        quizzes = Quiz.query.join(Module).filter(
+            Module.course_id == course_id,
+            Quiz.is_active == True
+        ).all()
+        
+        quizzes_data = []
+        for quiz in quizzes:
+            quiz_data = quiz.to_dict()
+            # Add some basic stats
+            quiz_data['question_count'] = len(quiz.questions)
+            quiz_data['stats'] = {
+                'total_attempts': QuizAttempt.query.filter_by(quiz_id=quiz.id).count(),
+                'average_score': quiz.get_average_score()
+            }
+            quizzes_data.append(quiz_data)
+        
+        return jsonify(quizzes_data), 200
+        
+    except Exception as e:
+        current_app.logger.error(f"Get course quizzes error: {str(e)}")
+        return jsonify({'error': 'Failed to get course quizzes'}), 500
 
 @courses_bp.route('/<int:course_id>/modules', methods=['GET'])
 def get_course_modules(course_id):
