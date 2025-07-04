@@ -265,6 +265,83 @@ def create_sample_data():
             db.session.add(module)
     
     db.session.commit()
+    
+    # Create sample quizzes for each course
+    from src.models.quiz import Quiz, Question
+    
+    quiz_data = [
+        {
+            'course_id': 1,  # ISO 42001 Foundations
+            'title': 'ISO 42001 Foundations Assessment',
+            'description': 'Test your understanding of AI governance fundamentals',
+            'time_limit_minutes': 30,
+            'passing_score': 70,
+            'max_attempts': 3,
+            'questions': [
+                {
+                    'question_text': 'What is the primary purpose of ISO/IEC 42001?',
+                    'question_type': 'multiple_choice',
+                    'options': [
+                        'To provide guidelines for AI system development',
+                        'To establish requirements for AI management systems',
+                        'To define AI testing procedures',
+                        'To regulate AI market practices'
+                    ],
+                    'correct_answer': 'To establish requirements for AI management systems',
+                    'explanation': 'ISO/IEC 42001 specifies requirements for establishing, implementing, maintaining and continually improving an AI management system.'
+                },
+                {
+                    'question_text': 'Which of the following are key components of an AI management system? (Select all that apply)',
+                    'question_type': 'multiple_select',
+                    'options': [
+                        'Risk management',
+                        'Governance framework',
+                        'Performance monitoring',
+                        'Marketing strategy'
+                    ],
+                    'correct_answer': 'Risk management,Governance framework,Performance monitoring',
+                    'explanation': 'AI management systems include risk management, governance frameworks, and performance monitoring, but not marketing strategy.'
+                }
+            ]
+        },
+        {
+            'course_id': 2,  # ISO 42001 Practitioner
+            'title': 'ISO 42001 Practitioner Exam',
+            'description': 'Advanced assessment for practical implementation knowledge',
+            'time_limit_minutes': 45,
+            'passing_score': 75,
+            'max_attempts': 2,
+            'questions': [
+                {
+                    'question_text': 'How should AI risks be categorized in an ISO 42001 implementation?',
+                    'question_type': 'multiple_choice',
+                    'options': [
+                        'By technical complexity only',
+                        'By business impact and likelihood',
+                        'By development cost',
+                        'By team size requirements'
+                    ],
+                    'correct_answer': 'By business impact and likelihood',
+                    'explanation': 'AI risks should be categorized based on their potential business impact and likelihood of occurrence.'
+                }
+            ]
+        }
+    ]
+    
+    for quiz_info in quiz_data:
+        questions_data = quiz_info.pop('questions')
+        quiz = Quiz(**quiz_info)
+        db.session.add(quiz)
+        db.session.commit()  # Commit to get quiz.id
+        
+        for q_data in questions_data:
+            question = Question(
+                quiz_id=quiz.id,
+                **q_data
+            )
+            db.session.add(question)
+    
+    db.session.commit()
     print("Sample data created successfully!")
 
 # Create the Flask application

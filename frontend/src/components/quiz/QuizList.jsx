@@ -49,7 +49,9 @@ const QuizList = ({ courseId, onQuizSelect }) => {
     try {
       const response = await apiService.getUserQuizAttempts();
       const attemptsMap = {};
-      response.forEach(attempt => {
+      // Handle the response structure: { attempts: [...], total: number }
+      const attemptsArray = response.attempts || [];
+      attemptsArray.forEach(attempt => {
         if (!attemptsMap[attempt.quiz_id]) {
           attemptsMap[attempt.quiz_id] = [];
         }

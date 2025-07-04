@@ -37,7 +37,7 @@ def get_all_quizzes():
 def submit_quiz_attempt(quiz_id):
     """Submit quiz attempt directly (alternative to attempt-based submission)"""
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())  # Convert string to int
         data = request.get_json()
         
         quiz = Quiz.query.get(quiz_id)
@@ -128,7 +128,7 @@ def get_module_quizzes(module_id):
 def get_quiz(quiz_id):
     """Get quiz details with questions"""
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())  # Convert string to int
         
         quiz = Quiz.query.get(quiz_id)
         if not quiz or not quiz.is_active:
@@ -155,7 +155,7 @@ def get_quiz(quiz_id):
 def start_quiz(quiz_id):
     """Start a new quiz attempt"""
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())  # Convert string to int
         
         quiz = Quiz.query.get(quiz_id)
         if not quiz or not quiz.is_active:
@@ -292,7 +292,7 @@ def get_my_attempts():
     try:
         current_user_id = get_jwt_identity()
         
-        attempts = QuizAttempt.get_user_attempts(current_user_id)
+        attempts = QuizAttempt.get_user_attempts(int(current_user_id))  # Convert string to int for DB query
         
         return jsonify({
             'attempts': [attempt.to_dict() for attempt in attempts],

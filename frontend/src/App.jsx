@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import AuthPage from './pages/AuthPage';
 import Dashboard from './pages/Dashboard';
 import QuizPage from './pages/QuizPage';
+import QuizInterfacePage from './pages/QuizInterfacePage';
 import ProfilePage from './pages/ProfilePage';
 import './App.css';
 
@@ -403,6 +404,14 @@ const AppContent = () => {
           element={
             <ProtectedRoute>
               <QuizPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/quiz/:id" 
+          element={
+            <ProtectedRoute>
+              <QuizInterfacePage />
             </ProtectedRoute>
           } 
         />

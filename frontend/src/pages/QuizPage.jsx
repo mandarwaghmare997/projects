@@ -22,8 +22,8 @@ const QuizPage = () => {
   const [quizCompleted, setQuizCompleted] = useState(false);
 
   const handleQuizSelect = (quiz) => {
-    setSelectedQuiz(quiz);
-    setQuizCompleted(false);
+    // Navigate to the quiz interface page
+    navigate(`/quiz/${quiz.id}`);
   };
 
   const handleQuizComplete = (results) => {

@@ -69,6 +69,15 @@ class Quiz(db.Model):
         attempts = self.get_user_attempts(user_id)
         return len(attempts) < self.max_attempts
 
+    def get_average_score(self):
+        """Get average score for this quiz across all attempts"""
+        from src.models.quiz import QuizAttempt  # Import here to avoid circular import
+        attempts = QuizAttempt.query.filter_by(quiz_id=self.id).filter(QuizAttempt.score.isnot(None)).all()
+        if not attempts:
+            return 0
+        total_score = sum(attempt.score for attempt in attempts)
+        return round(total_score / len(attempts), 1)
+
     @staticmethod
     def get_by_module(module_id):
         """Get quizzes by module ID"""
