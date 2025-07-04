@@ -131,9 +131,9 @@ def login():
             user_agent=request.headers.get('User-Agent')
         )
         
-        # Create tokens
-        access_token = create_access_token(identity=user.id)
-        refresh_token = create_refresh_token(identity=user.id)
+        # Create tokens (convert user.id to string for JWT subject)
+        access_token = create_access_token(identity=str(user.id))
+        refresh_token = create_refresh_token(identity=str(user.id))
         
         return jsonify({
             'message': 'Login successful',
@@ -152,7 +152,7 @@ def refresh():
     """Refresh access token"""
     try:
         current_user_id = get_jwt_identity()
-        user = User.query.get(current_user_id)
+        user = User.query.get(int(current_user_id))  # Convert string back to int for DB query
         
         if not user or not user.is_active:
             return jsonify({'error': 'User not found or inactive'}), 404
@@ -195,7 +195,7 @@ def get_profile():
     """Get current user profile"""
     try:
         current_user_id = get_jwt_identity()
-        user = User.query.get(current_user_id)
+        user = User.query.get(int(current_user_id))  # Convert string back to int for DB query
         
         if not user:
             return jsonify({'error': 'User not found'}), 404

@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 # DON'T CHANGE THIS !!!
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from flask import Flask, send_from_directory, jsonify
+from flask import Flask, send_from_directory, jsonify, current_app
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from datetime import timedelta
@@ -51,6 +51,10 @@ def create_app(config_name='development'):
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
     app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=30)
     app.config['JWT_ALGORITHM'] = 'HS256'
+    app.config['JWT_DECODE_ALGORITHMS'] = ['HS256']
+    app.config['JWT_TOKEN_LOCATION'] = ['headers']
+    app.config['JWT_HEADER_NAME'] = 'Authorization'
+    app.config['JWT_HEADER_TYPE'] = 'Bearer'
     
     # AWS and Qryti.com configuration
     app.config['QRYTI_DOMAIN'] = os.environ.get('QRYTI_DOMAIN', 'qryti.com')
@@ -78,17 +82,20 @@ def create_app(config_name='development'):
     # Initialize JWT
     jwt = JWTManager(app)
     
-    # JWT error handlers
+    # JWT error handlers with debug logging
     @jwt.expired_token_loader
     def expired_token_callback(jwt_header, jwt_payload):
+        current_app.logger.error(f"JWT expired token: header={jwt_header}, payload={jwt_payload}")
         return jsonify({'error': 'Token has expired', 'code': 'token_expired'}), 401
     
     @jwt.invalid_token_loader
     def invalid_token_callback(error):
+        current_app.logger.error(f"JWT invalid token: error={error}")
         return jsonify({'error': 'Invalid token', 'code': 'invalid_token'}), 401
     
     @jwt.unauthorized_loader
     def missing_token_callback(error):
+        current_app.logger.error(f"JWT missing token: error={error}")
         return jsonify({'error': 'Authorization token required', 'code': 'authorization_required'}), 401
     
     # Register blueprints with API prefix
