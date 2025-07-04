@@ -1,7 +1,7 @@
 // API service for Qryti Learn frontend-backend communication
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
   ? 'https://api.qryti.com' 
-  : 'http://localhost:5000';
+  : 'http://localhost:5002';
 
 class ApiService {
   constructor() {

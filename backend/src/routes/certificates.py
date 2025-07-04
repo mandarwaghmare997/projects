@@ -1,10 +1,12 @@
-from flask import Blueprint, request, jsonify, current_app
+from flask import Blueprint, request, jsonify, current_app, send_file
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime, timedelta
+import os
 
 from src.models.user import User, db
 from src.models.course import Course, CourseEnrollment
 from src.models.progress import Certificate, LearningAnalytics
+from src.utils.certificate_generator import create_certificate
 
 certificates_bp = Blueprint('certificates', __name__)
 
@@ -13,7 +15,7 @@ certificates_bp = Blueprint('certificates', __name__)
 def get_my_certificates():
     """Get current user's certificates"""
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())  # Convert string to int
         
         certificates = Certificate.get_user_certificates(current_user_id)
         
@@ -31,7 +33,7 @@ def get_my_certificates():
 def generate_certificate(course_id):
     """Generate certificate for completed course"""
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())  # Convert string to int
         
         # Check if user completed the course
         enrollment = CourseEnrollment.query.filter_by(
@@ -61,6 +63,27 @@ def generate_certificate(course_id):
             course_id=course_id,
             final_score=enrollment.final_score or 0
         )
+        
+        # Generate PDF certificate
+        try:
+            user = User.query.get(current_user_id)
+            course = Course.query.get(course_id)
+            
+            pdf_path = create_certificate(
+                user=user,
+                course=course,
+                certificate_id=certificate.certificate_id,
+                final_score=certificate.final_score,
+                completion_date=certificate.issued_date
+            )
+            
+            # Store PDF path in certificate record
+            certificate.pdf_path = pdf_path
+            db.session.commit()
+            
+        except Exception as pdf_error:
+            current_app.logger.error(f"PDF generation error: {str(pdf_error)}")
+            # Continue without PDF if generation fails
         
         # Log certificate generation event
         LearningAnalytics.log_event(
@@ -288,4 +311,56 @@ def revoke_certificate(certificate_id):
         db.session.rollback()
         current_app.logger.error(f"Revoke certificate error: {str(e)}")
         return jsonify({'error': 'Failed to revoke certificate'}), 500
+
+@certificates_bp.route('/<certificate_id>/download', methods=['GET'])
+@jwt_required()
+def download_certificate_pdf(certificate_id):
+    """Download certificate PDF"""
+    try:
+        current_user_id = int(get_jwt_identity())  # Convert string to int
+        
+        # Find the certificate
+        certificate = Certificate.query.filter_by(certificate_id=certificate_id).first()
+        
+        if not certificate:
+            return jsonify({'error': 'Certificate not found'}), 404
+        
+        # Check if user owns this certificate
+        if certificate.user_id != current_user_id:
+            return jsonify({'error': 'Access denied'}), 403
+        
+        # Check if PDF exists
+        if not certificate.pdf_path or not os.path.exists(certificate.pdf_path):
+            # Try to regenerate PDF
+            try:
+                user = User.query.get(current_user_id)
+                course = Course.query.get(certificate.course_id)
+                
+                pdf_path = create_certificate(
+                    user=user,
+                    course=course,
+                    certificate_id=certificate.certificate_id,
+                    final_score=certificate.final_score,
+                    completion_date=certificate.issued_date
+                )
+                
+                certificate.pdf_path = pdf_path
+                db.session.commit()
+                
+            except Exception as regen_error:
+                current_app.logger.error(f"PDF regeneration error: {str(regen_error)}")
+                return jsonify({'error': 'Certificate PDF not available'}), 404
+        
+        # Send the PDF file
+        filename = f"certificate_{certificate.certificate_id}.pdf"
+        return send_file(
+            certificate.pdf_path,
+            as_attachment=True,
+            download_name=filename,
+            mimetype='application/pdf'
+        )
+        
+    except Exception as e:
+        current_app.logger.error(f"Download certificate PDF error: {str(e)}")
+        return jsonify({'error': 'Failed to download certificate'}), 500
 

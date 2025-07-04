@@ -6,6 +6,9 @@ import Dashboard from './pages/Dashboard';
 import QuizPage from './pages/QuizPage';
 import QuizInterfacePage from './pages/QuizInterfacePage';
 import ProfilePage from './pages/ProfilePage';
+// import CertificatesPage from './pages/CertificatesPage';
+// import VerifyPage from './pages/VerifyPage';
+// import AnalyticsPage from './pages/AnalyticsPage';
 import './App.css';
 
 // Protected Route Component
@@ -422,6 +425,30 @@ const AppContent = () => {
               <QuizPage />
             </ProtectedRoute>
           } 
+        />
+        {/* <Route 
+          path="/analytics" 
+          element={
+            <ProtectedRoute>
+              <AnalyticsPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/certificates" 
+          element={
+            <ProtectedRoute>
+              <CertificatesPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/verify" 
+          element={<VerifyPage />} 
+        /> */}
+        <Route 
+          path="/verify/:certificateId" 
+          element={<VerifyPage />} 
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

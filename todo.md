@@ -51,7 +51,7 @@
 - [x] Add user profile management
 - [x] Implement session management and token refresh
 
-## Phase 5: Build quiz system with instant scoring
+## Phase 5: Build quiz system with instant scoring ✅
 - [x] Create interactive quiz interface
 - [x] Implement quiz timer and progress tracking
 - [x] Build question types (MCQ, multiple select, case study)

@@ -1,191 +1,330 @@
 from flask import Blueprint, request, jsonify, current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime, timedelta
+from sqlalchemy import func, desc
 
 from src.models.user import User, db
 from src.models.course import Course, CourseEnrollment
-from src.models.progress import UserProgress, LearningAnalytics
+from src.models.quiz import Quiz, QuizAttempt
+from src.models.progress import UserProgress, Certificate, LearningAnalytics
 
 progress_bp = Blueprint('progress', __name__)
 
 @progress_bp.route('/dashboard', methods=['GET'])
 @jwt_required()
-def get_dashboard():
-    """Get user's learning dashboard data"""
+def get_progress_dashboard():
+    """Get comprehensive progress dashboard data for current user"""
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         
-        # Get user's enrollments
-        enrollments = CourseEnrollment.get_user_enrollments(current_user_id)
+        # Get overview statistics
+        enrolled_courses = CourseEnrollment.query.filter_by(user_id=current_user_id).count()
+        completed_courses = CourseEnrollment.query.filter_by(
+            user_id=current_user_id, 
+            status='completed'
+        ).count()
+        certificates_earned = Certificate.query.filter_by(
+            user_id=current_user_id, 
+            is_valid=True
+        ).count()
         
-        # Calculate overall statistics
-        total_courses = len(enrollments)
-        completed_courses = len([e for e in enrollments if e.status == 'completed'])
-        in_progress_courses = len([e for e in enrollments if e.status == 'in_progress'])
-        
-        # Get recent activity
-        recent_progress = UserProgress.query.filter_by(user_id=current_user_id)\
-            .order_by(UserProgress.last_accessed.desc()).limit(5).all()
-        
-        # Calculate total learning time
-        total_time = db.session.query(db.func.sum(UserProgress.time_spent_minutes))\
+        # Calculate total time spent
+        total_time = db.session.query(func.sum(UserProgress.time_spent_minutes))\
             .filter_by(user_id=current_user_id).scalar() or 0
         
-        # Get course progress summaries
-        course_progress = []
-        for enrollment in enrollments:
-            progress_summary = UserProgress.get_course_progress_summary(
-                current_user_id, enrollment.course_id
-            )
-            course_data = {
-                'enrollment': enrollment.to_dict(),
-                'progress': progress_summary
-            }
-            course_progress.append(course_data)
+        # Get course progress details
+        enrollments = CourseEnrollment.query.filter_by(user_id=current_user_id)\
+            .join(Course).all()
         
-        return jsonify({
+        courses_progress = []
+        for enrollment in enrollments:
+            course = enrollment.course
+            
+            # Get progress for this course
+            progress_records = UserProgress.query.filter_by(
+                user_id=current_user_id,
+                course_id=course.id
+            ).all()
+            
+            total_modules = len(course.modules) if course.modules else 0
+            completed_modules = len([p for p in progress_records if p.status == 'completed'])
+            completion_percentage = (completed_modules / total_modules * 100) if total_modules > 0 else 0
+            
+            course_time = sum(p.time_spent_minutes for p in progress_records)
+            
+            # Calculate average score from quiz attempts
+            quiz_attempts = QuizAttempt.query.join(Quiz)\
+                .filter(Quiz.course_id == course.id, QuizAttempt.user_id == current_user_id)\
+                .all()
+            
+            average_score = None
+            if quiz_attempts:
+                scores = [attempt.score for attempt in quiz_attempts if attempt.score is not None]
+                if scores:
+                    average_score = sum(scores) / len(scores)
+            
+            courses_progress.append({
+                'id': course.id,
+                'title': course.title,
+                'level': course.level,
+                'total_modules': total_modules,
+                'completed_modules': completed_modules,
+                'completion_percentage': completion_percentage,
+                'time_spent_minutes': course_time,
+                'average_score': average_score,
+                'enrollment_status': enrollment.status,
+                'enrolled_at': enrollment.enrolled_at.isoformat() if enrollment.enrolled_at else None
+            })
+        
+        dashboard_data = {
             'overview': {
-                'total_courses': total_courses,
+                'enrolled_courses': enrolled_courses,
                 'completed_courses': completed_courses,
-                'in_progress_courses': in_progress_courses,
-                'completion_rate': (completed_courses / total_courses * 100) if total_courses > 0 else 0,
-                'total_learning_time_minutes': total_time,
-                'total_learning_time_hours': round(total_time / 60, 1)
+                'certificates_earned': certificates_earned,
+                'total_time_minutes': total_time
             },
-            'course_progress': course_progress,
-            'recent_activity': [progress.to_dict() for progress in recent_progress]
-        }), 200
+            'courses': courses_progress
+        }
+        
+        return jsonify(dashboard_data), 200
         
     except Exception as e:
-        current_app.logger.error(f"Get dashboard error: {str(e)}")
-        return jsonify({'error': 'Failed to get dashboard data'}), 500
+        current_app.logger.error(f"Get progress dashboard error: {str(e)}")
+        return jsonify({'error': 'Failed to get progress dashboard'}), 500
 
 @progress_bp.route('/course/<int:course_id>', methods=['GET'])
 @jwt_required()
 def get_course_progress(course_id):
     """Get detailed progress for a specific course"""
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         
-        # Check enrollment
+        # Check if user is enrolled in the course
         enrollment = CourseEnrollment.query.filter_by(
-            user_id=current_user_id, course_id=course_id
+            user_id=current_user_id,
+            course_id=course_id
         ).first()
         
         if not enrollment:
             return jsonify({'error': 'Not enrolled in this course'}), 404
         
-        # Get progress records
-        progress_records = UserProgress.get_user_progress(current_user_id, course_id)
-        progress_summary = UserProgress.get_course_progress_summary(current_user_id, course_id)
-        
-        # Get course details
         course = Course.query.get(course_id)
+        if not course:
+            return jsonify({'error': 'Course not found'}), 404
         
-        return jsonify({
-            'course': course.to_dict() if course else None,
-            'enrollment': enrollment.to_dict(),
-            'progress_summary': progress_summary,
-            'module_progress': [progress.to_dict() for progress in progress_records]
-        }), 200
+        # Get all progress records for this course
+        progress_records = UserProgress.query.filter_by(
+            user_id=current_user_id,
+            course_id=course_id
+        ).all()
+        
+        # Get quiz attempts for this course
+        quiz_attempts = QuizAttempt.query.join(Quiz)\
+            .filter(Quiz.course_id == course_id, QuizAttempt.user_id == current_user_id)\
+            .order_by(desc(QuizAttempt.attempted_at)).all()
+        
+        # Calculate summary statistics
+        total_modules = len(course.modules) if course.modules else 0
+        completed_modules = len([p for p in progress_records if p.status == 'completed'])
+        in_progress_modules = len([p for p in progress_records if p.status == 'in_progress'])
+        total_time = sum(p.time_spent_minutes for p in progress_records)
+        
+        completion_percentage = (completed_modules / total_modules * 100) if total_modules > 0 else 0
+        
+        # Average score from quiz attempts
+        scores = [attempt.score for attempt in quiz_attempts if attempt.score is not None]
+        average_score = sum(scores) / len(scores) if scores else None
+        
+        progress_data = {
+            'course': {
+                'id': course.id,
+                'title': course.title,
+                'description': course.description,
+                'level': course.level
+            },
+            'enrollment': {
+                'status': enrollment.status,
+                'enrolled_at': enrollment.enrolled_at.isoformat() if enrollment.enrolled_at else None,
+                'completed_at': enrollment.completed_at.isoformat() if enrollment.completed_at else None,
+                'final_score': enrollment.final_score
+            },
+            'summary': {
+                'total_modules': total_modules,
+                'completed_modules': completed_modules,
+                'in_progress_modules': in_progress_modules,
+                'completion_percentage': completion_percentage,
+                'total_time_minutes': total_time,
+                'average_score': average_score
+            },
+            'modules': [p.to_dict() for p in progress_records],
+            'quiz_attempts': [
+                {
+                    'id': attempt.id,
+                    'quiz_title': attempt.quiz.title,
+                    'score': attempt.score,
+                    'passed': attempt.passed,
+                    'attempted_at': attempt.attempted_at.isoformat(),
+                    'time_taken_minutes': attempt.time_taken_minutes
+                } for attempt in quiz_attempts
+            ]
+        }
+        
+        return jsonify(progress_data), 200
         
     except Exception as e:
         current_app.logger.error(f"Get course progress error: {str(e)}")
         return jsonify({'error': 'Failed to get course progress'}), 500
 
-@progress_bp.route('/analytics', methods=['GET'])
+@progress_bp.route('/module/<int:module_id>/start', methods=['POST'])
 @jwt_required()
-def get_learning_analytics():
-    """Get user's learning analytics"""
+def start_module(module_id):
+    """Mark a module as started"""
     try:
-        current_user_id = get_jwt_identity()
-        
-        # Get query parameters
-        days = request.args.get('days', 30, type=int)
-        event_type = request.args.get('event_type')
-        
-        # Calculate date range
-        end_date = datetime.utcnow()
-        start_date = end_date - timedelta(days=days)
-        
-        # Get analytics data
-        query = LearningAnalytics.query.filter(
-            LearningAnalytics.user_id == current_user_id,
-            LearningAnalytics.timestamp >= start_date,
-            LearningAnalytics.timestamp <= end_date
-        )
-        
-        if event_type:
-            query = query.filter(LearningAnalytics.event_type == event_type)
-        
-        analytics = query.order_by(LearningAnalytics.timestamp.desc()).limit(100).all()
-        
-        # Calculate activity summary
-        activity_by_day = {}
-        event_counts = {}
-        
-        for record in analytics:
-            day_key = record.timestamp.strftime('%Y-%m-%d')
-            activity_by_day[day_key] = activity_by_day.get(day_key, 0) + 1
-            event_counts[record.event_type] = event_counts.get(record.event_type, 0) + 1
-        
-        return jsonify({
-            'analytics': [record.to_dict() for record in analytics],
-            'summary': {
-                'total_events': len(analytics),
-                'date_range': {
-                    'start': start_date.isoformat(),
-                    'end': end_date.isoformat(),
-                    'days': days
-                },
-                'activity_by_day': activity_by_day,
-                'event_counts': event_counts
-            }
-        }), 200
-        
-    except Exception as e:
-        current_app.logger.error(f"Get learning analytics error: {str(e)}")
-        return jsonify({'error': 'Failed to get learning analytics'}), 500
-
-@progress_bp.route('/module/<int:module_id>/time', methods=['POST'])
-@jwt_required()
-def update_time_spent(module_id):
-    """Update time spent on a module"""
-    try:
-        current_user_id = get_jwt_identity()
-        data = request.get_json()
-        
-        additional_minutes = data.get('minutes', 0)
-        if additional_minutes <= 0:
-            return jsonify({'error': 'Invalid time value'}), 400
+        current_user_id = int(get_jwt_identity())
         
         # Get or create progress record
         progress = UserProgress.query.filter_by(
-            user_id=current_user_id, module_id=module_id
+            user_id=current_user_id,
+            module_id=module_id
         ).first()
         
         if not progress:
-            return jsonify({'error': 'Module progress not found'}), 404
+            # Get module to find course_id
+            from src.models.course import Module
+            module = Module.query.get(module_id)
+            if not module:
+                return jsonify({'error': 'Module not found'}), 404
+            
+            progress = UserProgress(
+                user_id=current_user_id,
+                course_id=module.course_id,
+                module_id=module_id
+            )
+            db.session.add(progress)
         
-        # Update time spent
-        progress.update_time_spent(additional_minutes)
+        progress.start_module()
         
-        # Log time tracking event
+        # Log analytics event
         LearningAnalytics.log_event(
             user_id=current_user_id,
-            event_type='time_tracked',
+            event_type='module_started',
             event_data={
                 'module_id': module_id,
-                'additional_minutes': additional_minutes,
-                'total_minutes': progress.time_spent_minutes
+                'course_id': progress.course_id
             },
             ip_address=request.remote_addr,
             user_agent=request.headers.get('User-Agent')
         )
         
         return jsonify({
-            'message': 'Time updated successfully',
+            'message': 'Module started successfully',
             'progress': progress.to_dict()
+        }), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Start module error: {str(e)}")
+        return jsonify({'error': 'Failed to start module'}), 500
+
+@progress_bp.route('/module/<int:module_id>/complete', methods=['POST'])
+@jwt_required()
+def complete_module(module_id):
+    """Mark a module as completed"""
+    try:
+        current_user_id = int(get_jwt_identity())
+        data = request.get_json() or {}
+        score = data.get('score')
+        
+        progress = UserProgress.query.filter_by(
+            user_id=current_user_id,
+            module_id=module_id
+        ).first()
+        
+        if not progress:
+            return jsonify({'error': 'Module progress not found'}), 404
+        
+        progress.complete_module(score)
+        
+        # Log analytics event
+        LearningAnalytics.log_event(
+            user_id=current_user_id,
+            event_type='module_completed',
+            event_data={
+                'module_id': module_id,
+                'course_id': progress.course_id,
+                'score': score
+            },
+            ip_address=request.remote_addr,
+            user_agent=request.headers.get('User-Agent')
+        )
+        
+        # Check if course is now complete
+        course_progress = UserProgress.get_course_progress_summary(
+            current_user_id, 
+            progress.course_id
+        )
+        
+        if course_progress['completion_percentage'] >= 100:
+            # Update enrollment status
+            enrollment = CourseEnrollment.query.filter_by(
+                user_id=current_user_id,
+                course_id=progress.course_id
+            ).first()
+            
+            if enrollment and enrollment.status != 'completed':
+                enrollment.status = 'completed'
+                enrollment.completed_at = datetime.utcnow()
+                enrollment.final_score = course_progress['average_score']
+                db.session.commit()
+                
+                # Log course completion
+                LearningAnalytics.log_event(
+                    user_id=current_user_id,
+                    event_type='course_completed',
+                    event_data={
+                        'course_id': progress.course_id,
+                        'final_score': course_progress['average_score']
+                    },
+                    ip_address=request.remote_addr,
+                    user_agent=request.headers.get('User-Agent')
+                )
+        
+        return jsonify({
+            'message': 'Module completed successfully',
+            'progress': progress.to_dict(),
+            'course_progress': course_progress
+        }), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Complete module error: {str(e)}")
+        return jsonify({'error': 'Failed to complete module'}), 500
+
+@progress_bp.route('/module/<int:module_id>/time', methods=['POST'])
+@jwt_required()
+def update_time_spent(module_id):
+    """Update time spent on a module"""
+    try:
+        current_user_id = int(get_jwt_identity())
+        data = request.get_json()
+        additional_minutes = data.get('additional_minutes', 0)
+        
+        if additional_minutes <= 0:
+            return jsonify({'error': 'Invalid time value'}), 400
+        
+        progress = UserProgress.query.filter_by(
+            user_id=current_user_id,
+            module_id=module_id
+        ).first()
+        
+        if not progress:
+            return jsonify({'error': 'Module progress not found'}), 404
+        
+        progress.update_time_spent(additional_minutes)
+        
+        return jsonify({
+            'message': 'Time updated successfully',
+            'total_time_minutes': progress.time_spent_minutes
         }), 200
         
     except Exception as e:
@@ -193,75 +332,74 @@ def update_time_spent(module_id):
         current_app.logger.error(f"Update time spent error: {str(e)}")
         return jsonify({'error': 'Failed to update time spent'}), 500
 
-@progress_bp.route('/stats', methods=['GET'])
+@progress_bp.route('/leaderboard', methods=['GET'])
 @jwt_required()
-def get_progress_stats():
-    """Get user's progress statistics"""
+def get_leaderboard():
+    """Get leaderboard data"""
     try:
-        current_user_id = get_jwt_identity()
+        # Get top learners by certificates earned
+        top_by_certificates = db.session.query(
+            User.id,
+            User.first_name,
+            User.last_name,
+            func.count(Certificate.id).label('certificates_count')
+        ).join(Certificate, User.id == Certificate.user_id)\
+         .filter(Certificate.is_valid == True)\
+         .group_by(User.id, User.first_name, User.last_name)\
+         .order_by(desc('certificates_count'))\
+         .limit(10).all()
         
-        # Get overall statistics
-        total_enrollments = CourseEnrollment.query.filter_by(user_id=current_user_id).count()
-        completed_courses = CourseEnrollment.query.filter_by(
-            user_id=current_user_id, status='completed'
-        ).count()
+        # Get top learners by time spent
+        top_by_time = db.session.query(
+            User.id,
+            User.first_name,
+            User.last_name,
+            func.sum(UserProgress.time_spent_minutes).label('total_time')
+        ).join(UserProgress, User.id == UserProgress.user_id)\
+         .group_by(User.id, User.first_name, User.last_name)\
+         .order_by(desc('total_time'))\
+         .limit(10).all()
         
-        # Get total modules and completed modules
-        total_progress = UserProgress.query.filter_by(user_id=current_user_id).count()
-        completed_modules = UserProgress.query.filter_by(
-            user_id=current_user_id, status='completed'
-        ).count()
+        # Get top learners by courses completed
+        top_by_courses = db.session.query(
+            User.id,
+            User.first_name,
+            User.last_name,
+            func.count(CourseEnrollment.id).label('completed_courses')
+        ).join(CourseEnrollment, User.id == CourseEnrollment.user_id)\
+         .filter(CourseEnrollment.status == 'completed')\
+         .group_by(User.id, User.first_name, User.last_name)\
+         .order_by(desc('completed_courses'))\
+         .limit(10).all()
         
-        # Get total learning time
-        total_time = db.session.query(db.func.sum(UserProgress.time_spent_minutes))\
-            .filter_by(user_id=current_user_id).scalar() or 0
+        leaderboard_data = {
+            'certificates': [
+                {
+                    'user_id': row.id,
+                    'name': f"{row.first_name} {row.last_name}",
+                    'count': row.certificates_count
+                } for row in top_by_certificates
+            ],
+            'time_spent': [
+                {
+                    'user_id': row.id,
+                    'name': f"{row.first_name} {row.last_name}",
+                    'minutes': row.total_time
+                } for row in top_by_time
+            ],
+            'courses_completed': [
+                {
+                    'user_id': row.id,
+                    'name': f"{row.first_name} {row.last_name}",
+                    'count': row.completed_courses
+                } for row in top_by_courses
+            ]
+        }
         
-        # Get average scores
-        avg_score = db.session.query(db.func.avg(UserProgress.score))\
-            .filter(UserProgress.user_id == current_user_id, UserProgress.score.isnot(None))\
-            .scalar() or 0
-        
-        # Get learning streak (consecutive days with activity)
-        recent_activity = LearningAnalytics.query.filter_by(user_id=current_user_id)\
-            .order_by(LearningAnalytics.timestamp.desc()).limit(30).all()
-        
-        # Calculate streak
-        streak_days = 0
-        current_date = datetime.utcnow().date()
-        activity_dates = set()
-        
-        for activity in recent_activity:
-            activity_dates.add(activity.timestamp.date())
-        
-        # Count consecutive days from today backwards
-        check_date = current_date
-        while check_date in activity_dates:
-            streak_days += 1
-            check_date -= timedelta(days=1)
-        
-        return jsonify({
-            'courses': {
-                'total_enrolled': total_enrollments,
-                'completed': completed_courses,
-                'completion_rate': (completed_courses / total_enrollments * 100) if total_enrollments > 0 else 0
-            },
-            'modules': {
-                'total_accessed': total_progress,
-                'completed': completed_modules,
-                'completion_rate': (completed_modules / total_progress * 100) if total_progress > 0 else 0
-            },
-            'learning_time': {
-                'total_minutes': total_time,
-                'total_hours': round(total_time / 60, 1),
-                'average_per_session': round(total_time / total_progress, 1) if total_progress > 0 else 0
-            },
-            'performance': {
-                'average_score': round(avg_score, 1) if avg_score else 0,
-                'learning_streak_days': streak_days
-            }
-        }), 200
+        return jsonify(leaderboard_data), 200
         
     except Exception as e:
-        current_app.logger.error(f"Get progress stats error: {str(e)}")
-        return jsonify({'error': 'Failed to get progress statistics'}), 500
+        current_app.logger.error(f"Get leaderboard error: {str(e)}")
+        return jsonify({'error': 'Failed to get leaderboard data'}), 500
+
 

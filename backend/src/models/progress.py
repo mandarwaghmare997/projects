@@ -130,6 +130,7 @@ class Certificate(db.Model):
     # AWS S3 compatible fields
     pdf_s3_key = db.Column(db.String(500), nullable=True)  # S3 object key for PDF
     pdf_url = db.Column(db.String(500), nullable=True)  # Public S3 URL for PDF
+    pdf_path = db.Column(db.String(500), nullable=True)  # Local PDF file path
     verification_url = db.Column(db.String(500), nullable=True)  # Public verification URL
     
     # Metadata

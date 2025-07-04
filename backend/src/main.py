@@ -22,6 +22,7 @@ from src.routes.courses import courses_bp
 from src.routes.quizzes import quizzes_bp
 from src.routes.progress import progress_bp
 from src.routes.certificates import certificates_bp
+from src.routes.analytics import analytics_bp
 
 def create_app(config_name='development'):
     """Application factory pattern for AWS deployment"""
@@ -105,6 +106,7 @@ def create_app(config_name='development'):
     app.register_blueprint(quizzes_bp, url_prefix='/api/quizzes')
     app.register_blueprint(progress_bp, url_prefix='/api/progress')
     app.register_blueprint(certificates_bp, url_prefix='/api/certificates')
+    app.register_blueprint(analytics_bp, url_prefix='/api/analytics')
     
     # Health check endpoint for AWS load balancer
     @app.route('/health')
@@ -349,5 +351,6 @@ app = create_app(os.environ.get('FLASK_ENV', 'development'))
 
 if __name__ == '__main__':
     # For local development
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    port = int(os.environ.get('PORT', 5001))
+    app.run(host='0.0.0.0', port=port, debug=True)
 
