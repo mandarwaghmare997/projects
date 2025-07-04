@@ -17,9 +17,10 @@ from src.models.quiz import Quiz, Question, QuizAttempt
 from src.models.progress import UserProgress, Certificate, LearningAnalytics
 from src.models.video import Video, VideoProgress, VideoBookmark
 from src.models.knowledge_base import (
-    ResourceCategory, KnowledgeResource, ResourceDownload, 
-    ResourceBookmark, ResourceRating, ResourceCollection, ResourceCollectionItem
+    ResourceCategory, KnowledgeResource, ResourceDownload,
+    ResourceBookmark
 )
+from src.models.admin import Organization, AdminUser, AuditLog, SystemSettings
 
 # Import all route blueprints
 from src.routes.user import user_bp
@@ -31,6 +32,10 @@ from src.routes.certificates import certificates_bp
 from src.routes.analytics import analytics_bp
 from src.routes.videos import videos_bp
 from src.routes.knowledge_base import knowledge_base_bp
+from src.routes.admin import admin_bp
+from src.routes.reporting import reporting_bp
+from src.routes.enterprise import enterprise_bp
+from src.routes.branding import branding_bp
 
 def create_app(config_name='development'):
     """Application factory pattern for AWS deployment"""
@@ -117,6 +122,10 @@ def create_app(config_name='development'):
     app.register_blueprint(analytics_bp, url_prefix='/api/analytics')
     app.register_blueprint(videos_bp, url_prefix='/api/videos')
     app.register_blueprint(knowledge_base_bp, url_prefix='/api/knowledge')
+    app.register_blueprint(admin_bp, url_prefix='/api/admin')
+    app.register_blueprint(reporting_bp, url_prefix='/api/reporting')
+    app.register_blueprint(enterprise_bp, url_prefix='/api/enterprise')
+    app.register_blueprint(branding_bp, url_prefix='/api/branding')
     
     # Health check endpoint for AWS load balancer
     @app.route('/health')
