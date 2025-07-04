@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 from datetime import datetime, timedelta
 # DON'T CHANGE THIS !!!
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
@@ -14,6 +15,11 @@ from src.models.user import db, User
 from src.models.course import Course, Module, CourseEnrollment
 from src.models.quiz import Quiz, Question, QuizAttempt
 from src.models.progress import UserProgress, Certificate, LearningAnalytics
+from src.models.video import Video, VideoProgress, VideoBookmark
+from src.models.knowledge_base import (
+    ResourceCategory, KnowledgeResource, ResourceDownload, 
+    ResourceBookmark, ResourceRating, ResourceCollection, ResourceCollectionItem
+)
 
 # Import all route blueprints
 from src.routes.user import user_bp
@@ -23,6 +29,8 @@ from src.routes.quizzes import quizzes_bp
 from src.routes.progress import progress_bp
 from src.routes.certificates import certificates_bp
 from src.routes.analytics import analytics_bp
+from src.routes.videos import videos_bp
+from src.routes.knowledge_base import knowledge_base_bp
 
 def create_app(config_name='development'):
     """Application factory pattern for AWS deployment"""
@@ -107,6 +115,8 @@ def create_app(config_name='development'):
     app.register_blueprint(progress_bp, url_prefix='/api/progress')
     app.register_blueprint(certificates_bp, url_prefix='/api/certificates')
     app.register_blueprint(analytics_bp, url_prefix='/api/analytics')
+    app.register_blueprint(videos_bp, url_prefix='/api/videos')
+    app.register_blueprint(knowledge_base_bp, url_prefix='/api/knowledge')
     
     # Health check endpoint for AWS load balancer
     @app.route('/health')
@@ -271,9 +281,12 @@ def create_sample_data():
     # Create sample quizzes for each course
     from src.models.quiz import Quiz, Question
     
+    # Get first module of each course for quiz assignment
+    first_modules = Module.query.filter_by(order_index=1).all()
+    
     quiz_data = [
         {
-            'course_id': 1,  # ISO 42001 Foundations
+            'module_id': first_modules[0].id if len(first_modules) > 0 else 1,  # ISO 42001 Foundations
             'title': 'ISO 42001 Foundations Assessment',
             'description': 'Test your understanding of AI governance fundamentals',
             'time_limit_minutes': 30,
@@ -307,7 +320,7 @@ def create_sample_data():
             ]
         },
         {
-            'course_id': 2,  # ISO 42001 Practitioner
+            'module_id': first_modules[1].id if len(first_modules) > 1 else 2,  # ISO 42001 Practitioner
             'title': 'ISO 42001 Practitioner Exam',
             'description': 'Advanced assessment for practical implementation knowledge',
             'time_limit_minutes': 45,
@@ -336,10 +349,17 @@ def create_sample_data():
         db.session.add(quiz)
         db.session.commit()  # Commit to get quiz.id
         
-        for q_data in questions_data:
+        for i, q_data in enumerate(questions_data):
+            # Convert sample data format to model format
             question = Question(
                 quiz_id=quiz.id,
-                **q_data
+                question_text=q_data['question_text'],
+                question_type=q_data.get('question_type', 'mcq'),
+                options_json=json.dumps(q_data.get('options', [])),
+                correct_answers_json=json.dumps([q_data.get('correct_answer', '')]),
+                explanation=q_data.get('explanation', ''),
+                points=q_data.get('points', 1),
+                order_index=i + 1
             )
             db.session.add(question)
     

@@ -1,0 +1,78 @@
+# Docker Compose for Qryti Learn Platform
+version: '3.8'
+
+services:
+  # Backend API Service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: qryti-learn-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - DATABASE_URL=sqlite:///src/database/app.db
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-your-secret-key-change-in-production}
+      - CORS_ORIGINS=http://localhost:3000,http://localhost:5173,https://qryti.com
+    volumes:
+      - ./backend/src/database:/app/src/database
+      - ./backend/src/certificates:/app/src/certificates
+      - ./backend/src/uploads:/app/src/uploads
+    networks:
+      - qryti-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend Web Service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: qryti-learn-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - qryti-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Database (Optional - for production use external database)
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: qryti-learn-db
+  #   environment:
+  #     POSTGRES_DB: qryti_learn
+  #     POSTGRES_USER: qryti_user
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-in-production}
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - qryti-network
+  #   restart: unless-stopped
+
+networks:
+  qryti-network:
+    driver: bridge
+    name: qryti-learn-network
+
+volumes:
+  postgres_data:
+    name: qryti-learn-postgres-data
+
+# Environment variables can be set in .env file:
+# JWT_SECRET_KEY=your-super-secret-jwt-key
+# POSTGRES_PASSWORD=your-secure-database-password
+

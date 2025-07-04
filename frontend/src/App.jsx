@@ -6,6 +6,11 @@ import Dashboard from './pages/Dashboard';
 import QuizPage from './pages/QuizPage';
 import QuizInterfacePage from './pages/QuizInterfacePage';
 import ProfilePage from './pages/ProfilePage';
+import VideoPage from './pages/VideoPage';
+import SearchPage from './pages/SearchPage';
+import KnowledgeBase from './components/knowledge/KnowledgeBase';
+import BookmarkManager from './components/bookmarks/BookmarkManager';
+import OfflineManager from './components/offline/OfflineManager';
 // import CertificatesPage from './pages/CertificatesPage';
 // import VerifyPage from './pages/VerifyPage';
 // import AnalyticsPage from './pages/AnalyticsPage';
@@ -423,6 +428,54 @@ const AppContent = () => {
           element={
             <ProtectedRoute>
               <QuizPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/videos" 
+          element={
+            <ProtectedRoute>
+              <VideoPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/videos/:id" 
+          element={
+            <ProtectedRoute>
+              <VideoPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/search" 
+          element={
+            <ProtectedRoute>
+              <SearchPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/knowledge" 
+          element={
+            <ProtectedRoute>
+              <KnowledgeBase />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/bookmarks" 
+          element={
+            <ProtectedRoute>
+              <BookmarkManager />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/offline" 
+          element={
+            <ProtectedRoute>
+              <OfflineManager />
             </ProtectedRoute>
           } 
         />
