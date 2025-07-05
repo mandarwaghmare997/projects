@@ -1,0 +1,424 @@
+{
+  "timestamp": "2025-07-05T01:44:50.960893",
+  "overall_status": "PRODUCTION READY",
+  "success_rate": 89.13043478260869,
+  "total_checks": 46,
+  "passed_checks": 41,
+  "failed_checks": 0,
+  "warning_checks": 5,
+  "critical_failures": 0,
+  "execution_time": 1.2696690559387207,
+  "checks": [
+    {
+      "category": "System",
+      "check": "CPU Cores",
+      "status": "PASS",
+      "details": "4 cores available",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.691267"
+    },
+    {
+      "category": "System",
+      "check": "Memory",
+      "status": "WARN",
+      "details": "Only 3.8GB (4GB+ recommended)",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.691410"
+    },
+    {
+      "category": "System",
+      "check": "Disk Space",
+      "status": "PASS",
+      "details": "31.2GB free",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.691453"
+    },
+    {
+      "category": "System",
+      "check": "Python Version",
+      "status": "PASS",
+      "details": "Python 3.11.0rc1",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.692883"
+    },
+    {
+      "category": "Dependencies",
+      "check": "Requirements File",
+      "status": "PASS",
+      "details": "requirements.txt found",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.692938"
+    },
+    {
+      "category": "Dependencies",
+      "check": "Package flask",
+      "status": "PASS",
+      "details": "Installed",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.765945"
+    },
+    {
+      "category": "Dependencies",
+      "check": "Package sqlalchemy",
+      "status": "PASS",
+      "details": "Installed",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.903190"
+    },
+    {
+      "category": "Dependencies",
+      "check": "Package jwt",
+      "status": "PASS",
+      "details": "Installed",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.920012"
+    },
+    {
+      "category": "Dependencies",
+      "check": "Package reportlab",
+      "status": "PASS",
+      "details": "Installed",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.920436"
+    },
+    {
+      "category": "Dependencies",
+      "check": "Package requests",
+      "status": "PASS",
+      "details": "Installed",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.920472"
+    },
+    {
+      "category": "Dependencies",
+      "check": "Monitoring (psutil)",
+      "status": "PASS",
+      "details": "Available for system monitoring",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.920488"
+    },
+    {
+      "category": "Database",
+      "check": "Database File",
+      "status": "PASS",
+      "details": "Found at /home/ubuntu/projects/backend/src/database/app.db",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.920522"
+    },
+    {
+      "category": "Database",
+      "check": "Table users",
+      "status": "PASS",
+      "details": "5 records",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.921264"
+    },
+    {
+      "category": "Database",
+      "check": "Table courses",
+      "status": "PASS",
+      "details": "4 records",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.921319"
+    },
+    {
+      "category": "Database",
+      "check": "Table modules",
+      "status": "PASS",
+      "details": "28 records",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.921354"
+    },
+    {
+      "category": "Database",
+      "check": "Table quizzes",
+      "status": "PASS",
+      "details": "2 records",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.921389"
+    },
+    {
+      "category": "Database",
+      "check": "Table questions",
+      "status": "PASS",
+      "details": "3 records",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.921427"
+    },
+    {
+      "category": "Database",
+      "check": "Table certificates",
+      "status": "PASS",
+      "details": "0 records",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.921466"
+    },
+    {
+      "category": "Database",
+      "check": "Table knowledge_resources",
+      "status": "PASS",
+      "details": "5 records",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.921520"
+    },
+    {
+      "category": "Database",
+      "check": "Table videos",
+      "status": "PASS",
+      "details": "0 records",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.921561"
+    },
+    {
+      "category": "Database",
+      "check": "Database Size",
+      "status": "PASS",
+      "details": "0.21MB",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.921594"
+    },
+    {
+      "category": "API",
+      "check": "Health Endpoint",
+      "status": "PASS",
+      "details": "API server responding",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.926714"
+    },
+    {
+      "category": "API",
+      "check": "Courses API",
+      "status": "PASS",
+      "details": "Status 200",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.938312"
+    },
+    {
+      "category": "API",
+      "check": "Quizzes API",
+      "status": "PASS",
+      "details": "Status 200",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.948023"
+    },
+    {
+      "category": "API",
+      "check": "Certificates API",
+      "status": "PASS",
+      "details": "Status 200",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.953312"
+    },
+    {
+      "category": "API",
+      "check": "Knowledge Base API",
+      "status": "PASS",
+      "details": "Status 200",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.959554"
+    },
+    {
+      "category": "Security",
+      "check": "Environment Variable JWT_SECRET_KEY",
+      "status": "WARN",
+      "details": "Not set",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.959707"
+    },
+    {
+      "category": "Security",
+      "check": "Environment Variable DATABASE_URL",
+      "status": "WARN",
+      "details": "Not set",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.959729"
+    },
+    {
+      "category": "Security",
+      "check": "Environment Variable FLASK_ENV",
+      "status": "WARN",
+      "details": "Not set",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.959748"
+    },
+    {
+      "category": "Security",
+      "check": "File Permissions app.db",
+      "status": "WARN",
+      "details": "Mode 664",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.959808"
+    },
+    {
+      "category": "Security",
+      "check": "File Permissions requirements.txt",
+      "status": "PASS",
+      "details": "Mode 644",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.959836"
+    },
+    {
+      "category": "Deployment",
+      "check": "Docker Compose",
+      "status": "PASS",
+      "details": "File exists",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.959871"
+    },
+    {
+      "category": "Deployment",
+      "check": "Nginx Configuration",
+      "status": "PASS",
+      "details": "File exists",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.959890"
+    },
+    {
+      "category": "Deployment",
+      "check": "Production Deployment Script",
+      "status": "PASS",
+      "details": "File exists",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.959913"
+    },
+    {
+      "category": "Deployment",
+      "check": "Backup Script",
+      "status": "PASS",
+      "details": "File exists",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.959935"
+    },
+    {
+      "category": "Deployment",
+      "check": "Systemd Service",
+      "status": "PASS",
+      "details": "File exists",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.959956"
+    },
+    {
+      "category": "Deployment",
+      "check": "Script deploy-production.sh Executable",
+      "status": "PASS",
+      "details": "Executable",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.959993"
+    },
+    {
+      "category": "Deployment",
+      "check": "Script backup.sh Executable",
+      "status": "PASS",
+      "details": "Executable",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.960020"
+    },
+    {
+      "category": "Documentation",
+      "check": "Project README",
+      "status": "PASS",
+      "details": "10577 bytes",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.960058"
+    },
+    {
+      "category": "Documentation",
+      "check": "Deployment Guide",
+      "status": "PASS",
+      "details": "10777 bytes",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.960085"
+    },
+    {
+      "category": "Documentation",
+      "check": "API Documentation",
+      "status": "PASS",
+      "details": "12480 bytes",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.960110"
+    },
+    {
+      "category": "Documentation",
+      "check": "User Guide",
+      "status": "PASS",
+      "details": "3964 bytes",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.960135"
+    },
+    {
+      "category": "Documentation",
+      "check": "Comprehensive API Docs",
+      "status": "PASS",
+      "details": "31758 bytes",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.960163"
+    },
+    {
+      "category": "Performance",
+      "check": "CPU Usage",
+      "status": "PASS",
+      "details": "0.8%",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:50.960594"
+    },
+    {
+      "category": "Performance",
+      "check": "Memory Usage",
+      "status": "PASS",
+      "details": "53.4%",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:50.960784"
+    },
+    {
+      "category": "Performance",
+      "check": "Disk Usage",
+      "status": "PASS",
+      "details": "18.1%",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:50.960837"
+    }
+  ],
+  "critical_failures_detail": [],
+  "warnings_detail": [
+    {
+      "category": "System",
+      "check": "Memory",
+      "status": "WARN",
+      "details": "Only 3.8GB (4GB+ recommended)",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.691410"
+    },
+    {
+      "category": "Security",
+      "check": "Environment Variable JWT_SECRET_KEY",
+      "status": "WARN",
+      "details": "Not set",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.959707"
+    },
+    {
+      "category": "Security",
+      "check": "Environment Variable DATABASE_URL",
+      "status": "WARN",
+      "details": "Not set",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.959729"
+    },
+    {
+      "category": "Security",
+      "check": "Environment Variable FLASK_ENV",
+      "status": "WARN",
+      "details": "Not set",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.959748"
+    },
+    {
+      "category": "Security",
+      "check": "File Permissions app.db",
+      "status": "WARN",
+      "details": "Mode 664",
+      "critical": false,
+      "timestamp": "2025-07-05T01:44:49.959808"
+    }
+  ]
+}

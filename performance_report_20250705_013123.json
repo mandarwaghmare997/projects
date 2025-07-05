@@ -1,0 +1,636 @@
+{
+  "summary": {
+    "total_optimizations": 44,
+    "successful_improvements": 14,
+    "success_rate": 31.818181818181817,
+    "generated_at": "2025-07-05T01:31:23.312213"
+  },
+  "optimizations": [
+    {
+      "category": "Database",
+      "action": "Size Analysis",
+      "result": "Database size: 0.19 MB",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.305169"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: users",
+      "result": "3 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.305814"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: courses",
+      "result": "4 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.305855"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: modules",
+      "result": "28 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.305888"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: course_enrollments",
+      "result": "0 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.305912"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: certificates",
+      "result": "0 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.305936"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: learning_analytics",
+      "result": "3 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.305963"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: quizzes",
+      "result": "2 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.305994"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: user_progress",
+      "result": "0 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.306026"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: questions",
+      "result": "3 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.306052"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: quiz_attempts",
+      "result": "0 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.306081"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: videos",
+      "result": "0 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.306106"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: video_progress",
+      "result": "0 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.306134"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: video_bookmarks",
+      "result": "0 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.306159"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: resource_categories",
+      "result": "5 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.306189"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: resource_collections",
+      "result": "0 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.306224"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: knowledge_resources",
+      "result": "5 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.306258"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: resource_downloads",
+      "result": "0 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.306290"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: resource_bookmarks",
+      "result": "0 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.306318"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: resource_ratings",
+      "result": "0 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.306348"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: resource_collection_items",
+      "result": "0 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.306380"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: organizations",
+      "result": "0 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.306407"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: system_settings",
+      "result": "0 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.306439"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: admin_users",
+      "result": "0 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.306468"
+    },
+    {
+      "category": "Database",
+      "action": "Table Analysis: audit_logs",
+      "result": "0 rows",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.306502"
+    },
+    {
+      "category": "Database",
+      "action": "Index Created: idx_users_email",
+      "result": "Indexed users(email)",
+      "improvement": "Improved query performance",
+      "timestamp": "2025-07-05T01:31:23.307563"
+    },
+    {
+      "category": "Database",
+      "action": "Index Error: idx_enrollments_user_course",
+      "result": "Error: no such table: main.enrollments",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.307670"
+    },
+    {
+      "category": "Database",
+      "action": "Index Created: idx_quiz_attempts_user",
+      "result": "Indexed quiz_attempts(user_id)",
+      "improvement": "Improved query performance",
+      "timestamp": "2025-07-05T01:31:23.308321"
+    },
+    {
+      "category": "Database",
+      "action": "Index Created: idx_quiz_attempts_quiz",
+      "result": "Indexed quiz_attempts(quiz_id)",
+      "improvement": "Improved query performance",
+      "timestamp": "2025-07-05T01:31:23.308956"
+    },
+    {
+      "category": "Database",
+      "action": "Index Created: idx_certificates_user",
+      "result": "Indexed certificates(user_id)",
+      "improvement": "Improved query performance",
+      "timestamp": "2025-07-05T01:31:23.309701"
+    },
+    {
+      "category": "Database",
+      "action": "Index Created: idx_video_progress_user",
+      "result": "Indexed video_progress(user_id)",
+      "improvement": "Improved query performance",
+      "timestamp": "2025-07-05T01:31:23.310334"
+    },
+    {
+      "category": "Database",
+      "action": "Index Created: idx_knowledge_downloads_user",
+      "result": "Indexed resource_downloads(user_id)",
+      "improvement": "Improved query performance",
+      "timestamp": "2025-07-05T01:31:23.310944"
+    },
+    {
+      "category": "Database",
+      "action": "Index Error: idx_audit_logs_timestamp",
+      "result": "Error: no such column: timestamp",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.311026"
+    },
+    {
+      "category": "Database",
+      "action": "Index Error: idx_progress_tracking_user",
+      "result": "Error: no such table: main.progress_tracking",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.311080"
+    },
+    {
+      "category": "Query Performance",
+      "action": "User Login Query",
+      "result": "0.05ms (1 rows)",
+      "improvement": "Fast",
+      "timestamp": "2025-07-05T01:31:23.311160"
+    },
+    {
+      "category": "Query Performance",
+      "action": "Course List Query",
+      "result": "0.04ms (4 rows)",
+      "improvement": "Fast",
+      "timestamp": "2025-07-05T01:31:23.311221"
+    },
+    {
+      "category": "Query Performance",
+      "action": "Quiz List Query",
+      "result": "0.04ms (2 rows)",
+      "improvement": "Fast",
+      "timestamp": "2025-07-05T01:31:23.311273"
+    },
+    {
+      "category": "Query Performance",
+      "action": "User Progress Query",
+      "result": "Error: no such table: progress_tracking",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.311305"
+    },
+    {
+      "category": "Query Performance",
+      "action": "Certificate Query",
+      "result": "0.04ms (0 rows)",
+      "improvement": "Fast",
+      "timestamp": "2025-07-05T01:31:23.311359"
+    },
+    {
+      "category": "API Response",
+      "action": "Implement Response Compression",
+      "result": "Enable gzip compression for JSON responses",
+      "improvement": "60-80% reduction in response size",
+      "timestamp": "2025-07-05T01:31:23.311467"
+    },
+    {
+      "category": "API Response",
+      "action": "Add Response Caching",
+      "result": "Cache static content and course data",
+      "improvement": "50-90% faster response times for cached content",
+      "timestamp": "2025-07-05T01:31:23.311487"
+    },
+    {
+      "category": "API Response",
+      "action": "Optimize JSON Serialization",
+      "result": "Use efficient JSON serialization methods",
+      "improvement": "20-30% faster JSON processing",
+      "timestamp": "2025-07-05T01:31:23.311508"
+    },
+    {
+      "category": "API Response",
+      "action": "Implement Pagination",
+      "result": "Paginate large result sets",
+      "improvement": "Consistent response times regardless of data size",
+      "timestamp": "2025-07-05T01:31:23.311526"
+    },
+    {
+      "category": "System Resources",
+      "action": "Resource Check",
+      "result": "psutil not available - install for detailed monitoring",
+      "improvement": null,
+      "timestamp": "2025-07-05T01:31:23.311630"
+    }
+  ],
+  "categories": {
+    "Database": [
+      {
+        "category": "Database",
+        "action": "Size Analysis",
+        "result": "Database size: 0.19 MB",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.305169"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: users",
+        "result": "3 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.305814"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: courses",
+        "result": "4 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.305855"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: modules",
+        "result": "28 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.305888"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: course_enrollments",
+        "result": "0 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.305912"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: certificates",
+        "result": "0 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.305936"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: learning_analytics",
+        "result": "3 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.305963"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: quizzes",
+        "result": "2 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.305994"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: user_progress",
+        "result": "0 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.306026"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: questions",
+        "result": "3 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.306052"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: quiz_attempts",
+        "result": "0 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.306081"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: videos",
+        "result": "0 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.306106"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: video_progress",
+        "result": "0 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.306134"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: video_bookmarks",
+        "result": "0 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.306159"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: resource_categories",
+        "result": "5 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.306189"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: resource_collections",
+        "result": "0 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.306224"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: knowledge_resources",
+        "result": "5 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.306258"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: resource_downloads",
+        "result": "0 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.306290"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: resource_bookmarks",
+        "result": "0 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.306318"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: resource_ratings",
+        "result": "0 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.306348"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: resource_collection_items",
+        "result": "0 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.306380"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: organizations",
+        "result": "0 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.306407"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: system_settings",
+        "result": "0 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.306439"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: admin_users",
+        "result": "0 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.306468"
+      },
+      {
+        "category": "Database",
+        "action": "Table Analysis: audit_logs",
+        "result": "0 rows",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.306502"
+      },
+      {
+        "category": "Database",
+        "action": "Index Created: idx_users_email",
+        "result": "Indexed users(email)",
+        "improvement": "Improved query performance",
+        "timestamp": "2025-07-05T01:31:23.307563"
+      },
+      {
+        "category": "Database",
+        "action": "Index Error: idx_enrollments_user_course",
+        "result": "Error: no such table: main.enrollments",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.307670"
+      },
+      {
+        "category": "Database",
+        "action": "Index Created: idx_quiz_attempts_user",
+        "result": "Indexed quiz_attempts(user_id)",
+        "improvement": "Improved query performance",
+        "timestamp": "2025-07-05T01:31:23.308321"
+      },
+      {
+        "category": "Database",
+        "action": "Index Created: idx_quiz_attempts_quiz",
+        "result": "Indexed quiz_attempts(quiz_id)",
+        "improvement": "Improved query performance",
+        "timestamp": "2025-07-05T01:31:23.308956"
+      },
+      {
+        "category": "Database",
+        "action": "Index Created: idx_certificates_user",
+        "result": "Indexed certificates(user_id)",
+        "improvement": "Improved query performance",
+        "timestamp": "2025-07-05T01:31:23.309701"
+      },
+      {
+        "category": "Database",
+        "action": "Index Created: idx_video_progress_user",
+        "result": "Indexed video_progress(user_id)",
+        "improvement": "Improved query performance",
+        "timestamp": "2025-07-05T01:31:23.310334"
+      },
+      {
+        "category": "Database",
+        "action": "Index Created: idx_knowledge_downloads_user",
+        "result": "Indexed resource_downloads(user_id)",
+        "improvement": "Improved query performance",
+        "timestamp": "2025-07-05T01:31:23.310944"
+      },
+      {
+        "category": "Database",
+        "action": "Index Error: idx_audit_logs_timestamp",
+        "result": "Error: no such column: timestamp",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.311026"
+      },
+      {
+        "category": "Database",
+        "action": "Index Error: idx_progress_tracking_user",
+        "result": "Error: no such table: main.progress_tracking",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.311080"
+      }
+    ],
+    "Query Performance": [
+      {
+        "category": "Query Performance",
+        "action": "User Login Query",
+        "result": "0.05ms (1 rows)",
+        "improvement": "Fast",
+        "timestamp": "2025-07-05T01:31:23.311160"
+      },
+      {
+        "category": "Query Performance",
+        "action": "Course List Query",
+        "result": "0.04ms (4 rows)",
+        "improvement": "Fast",
+        "timestamp": "2025-07-05T01:31:23.311221"
+      },
+      {
+        "category": "Query Performance",
+        "action": "Quiz List Query",
+        "result": "0.04ms (2 rows)",
+        "improvement": "Fast",
+        "timestamp": "2025-07-05T01:31:23.311273"
+      },
+      {
+        "category": "Query Performance",
+        "action": "User Progress Query",
+        "result": "Error: no such table: progress_tracking",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.311305"
+      },
+      {
+        "category": "Query Performance",
+        "action": "Certificate Query",
+        "result": "0.04ms (0 rows)",
+        "improvement": "Fast",
+        "timestamp": "2025-07-05T01:31:23.311359"
+      }
+    ],
+    "API Response": [
+      {
+        "category": "API Response",
+        "action": "Implement Response Compression",
+        "result": "Enable gzip compression for JSON responses",
+        "improvement": "60-80% reduction in response size",
+        "timestamp": "2025-07-05T01:31:23.311467"
+      },
+      {
+        "category": "API Response",
+        "action": "Add Response Caching",
+        "result": "Cache static content and course data",
+        "improvement": "50-90% faster response times for cached content",
+        "timestamp": "2025-07-05T01:31:23.311487"
+      },
+      {
+        "category": "API Response",
+        "action": "Optimize JSON Serialization",
+        "result": "Use efficient JSON serialization methods",
+        "improvement": "20-30% faster JSON processing",
+        "timestamp": "2025-07-05T01:31:23.311508"
+      },
+      {
+        "category": "API Response",
+        "action": "Implement Pagination",
+        "result": "Paginate large result sets",
+        "improvement": "Consistent response times regardless of data size",
+        "timestamp": "2025-07-05T01:31:23.311526"
+      }
+    ],
+    "System Resources": [
+      {
+        "category": "System Resources",
+        "action": "Resource Check",
+        "result": "psutil not available - install for detailed monitoring",
+        "improvement": null,
+        "timestamp": "2025-07-05T01:31:23.311630"
+      }
+    ]
+  }
+}

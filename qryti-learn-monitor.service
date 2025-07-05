@@ -1,0 +1,18 @@
+[Unit]
+Description=Qryti Learn Monitoring Service
+After=network.target qryti-learn-api.service
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/qryti-learn/monitoring
+ExecStart=/opt/qryti-learn/venv/bin/python monitor.py
+Restart=always
+RestartSec=30
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=qryti-learn-monitor
+
+[Install]
+WantedBy=multi-user.target

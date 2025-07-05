@@ -1,0 +1,284 @@
+{
+  "summary": {
+    "total_tests": 16,
+    "successful_tests": 13,
+    "warning_tests": 1,
+    "failed_tests": 2,
+    "success_rate": 81.25,
+    "generated_at": "2025-07-05T01:38:39.411267"
+  },
+  "test_results": [
+    {
+      "category": "Health Check",
+      "test_name": "API Health",
+      "result": "Healthy - healthy",
+      "status": "success",
+      "details": "Version: 1.0.0",
+      "timestamp": "2025-07-05T01:38:39.072928"
+    },
+    {
+      "category": "Authentication",
+      "test_name": "User Registration",
+      "result": "Success",
+      "status": "success",
+      "details": "User created: test_1751693919@qryti.com",
+      "timestamp": "2025-07-05T01:38:39.207476"
+    },
+    {
+      "category": "Authentication",
+      "test_name": "User Login",
+      "result": "Success",
+      "status": "success",
+      "details": "JWT token received",
+      "timestamp": "2025-07-05T01:38:39.343113"
+    },
+    {
+      "category": "Core APIs",
+      "test_name": "Courses API",
+      "result": "Success - 2 courses",
+      "status": "success",
+      "details": null,
+      "timestamp": "2025-07-05T01:38:39.352778"
+    },
+    {
+      "category": "Core APIs",
+      "test_name": "Quizzes API",
+      "result": "Success - 2 quizzes",
+      "status": "success",
+      "details": null,
+      "timestamp": "2025-07-05T01:38:39.360940"
+    },
+    {
+      "category": "Enterprise",
+      "test_name": "Admin Stats",
+      "result": "Error: Expecting value: line 1 column 1 (char 0)",
+      "status": "error",
+      "details": null,
+      "timestamp": "2025-07-05T01:38:39.363671"
+    },
+    {
+      "category": "Enterprise",
+      "test_name": "Analytics API",
+      "result": "Status 401",
+      "status": "warning",
+      "details": null,
+      "timestamp": "2025-07-05T01:38:39.365862"
+    },
+    {
+      "category": "Certificates",
+      "test_name": "Certificate Stats",
+      "result": "Success",
+      "status": "success",
+      "details": "Stats: {'certificates_by_level': {'level_1': 0, 'level_2': 0, 'level_3': 0, 'level_4': 0}, 'recent_certificates_30_days': 0, 'total_certificates': 0}",
+      "timestamp": "2025-07-05T01:38:39.371466"
+    },
+    {
+      "category": "Certificates",
+      "test_name": "Certificate Verification",
+      "result": "Endpoint working",
+      "status": "success",
+      "details": "Verification system operational",
+      "timestamp": "2025-07-05T01:38:39.374179"
+    },
+    {
+      "category": "Knowledge Base",
+      "test_name": "KB Stats",
+      "result": "Success",
+      "status": "success",
+      "details": "Resources: 5, Categories: 5",
+      "timestamp": "2025-07-05T01:38:39.380102"
+    },
+    {
+      "category": "Knowledge Base",
+      "test_name": "Video Stats",
+      "result": "Error: Expecting value: line 1 column 1 (char 0)",
+      "status": "error",
+      "details": null,
+      "timestamp": "2025-07-05T01:38:39.382450"
+    },
+    {
+      "category": "Performance",
+      "test_name": "Response Time /health",
+      "result": "2ms",
+      "status": "success",
+      "details": null,
+      "timestamp": "2025-07-05T01:38:39.384573"
+    },
+    {
+      "category": "Performance",
+      "test_name": "Response Time /api/courses",
+      "result": "8ms",
+      "status": "success",
+      "details": null,
+      "timestamp": "2025-07-05T01:38:39.392842"
+    },
+    {
+      "category": "Performance",
+      "test_name": "Response Time /api/quizzes",
+      "result": "7ms",
+      "status": "success",
+      "details": null,
+      "timestamp": "2025-07-05T01:38:39.400236"
+    },
+    {
+      "category": "Performance",
+      "test_name": "Response Time /api/certificates/stats",
+      "result": "5ms",
+      "status": "success",
+      "details": null,
+      "timestamp": "2025-07-05T01:38:39.405390"
+    },
+    {
+      "category": "Performance",
+      "test_name": "Response Time /api/knowledge/stats",
+      "result": "6ms",
+      "status": "success",
+      "details": null,
+      "timestamp": "2025-07-05T01:38:39.411007"
+    }
+  ],
+  "categories": {
+    "Health Check": [
+      {
+        "category": "Health Check",
+        "test_name": "API Health",
+        "result": "Healthy - healthy",
+        "status": "success",
+        "details": "Version: 1.0.0",
+        "timestamp": "2025-07-05T01:38:39.072928"
+      }
+    ],
+    "Authentication": [
+      {
+        "category": "Authentication",
+        "test_name": "User Registration",
+        "result": "Success",
+        "status": "success",
+        "details": "User created: test_1751693919@qryti.com",
+        "timestamp": "2025-07-05T01:38:39.207476"
+      },
+      {
+        "category": "Authentication",
+        "test_name": "User Login",
+        "result": "Success",
+        "status": "success",
+        "details": "JWT token received",
+        "timestamp": "2025-07-05T01:38:39.343113"
+      }
+    ],
+    "Core APIs": [
+      {
+        "category": "Core APIs",
+        "test_name": "Courses API",
+        "result": "Success - 2 courses",
+        "status": "success",
+        "details": null,
+        "timestamp": "2025-07-05T01:38:39.352778"
+      },
+      {
+        "category": "Core APIs",
+        "test_name": "Quizzes API",
+        "result": "Success - 2 quizzes",
+        "status": "success",
+        "details": null,
+        "timestamp": "2025-07-05T01:38:39.360940"
+      }
+    ],
+    "Enterprise": [
+      {
+        "category": "Enterprise",
+        "test_name": "Admin Stats",
+        "result": "Error: Expecting value: line 1 column 1 (char 0)",
+        "status": "error",
+        "details": null,
+        "timestamp": "2025-07-05T01:38:39.363671"
+      },
+      {
+        "category": "Enterprise",
+        "test_name": "Analytics API",
+        "result": "Status 401",
+        "status": "warning",
+        "details": null,
+        "timestamp": "2025-07-05T01:38:39.365862"
+      }
+    ],
+    "Certificates": [
+      {
+        "category": "Certificates",
+        "test_name": "Certificate Stats",
+        "result": "Success",
+        "status": "success",
+        "details": "Stats: {'certificates_by_level': {'level_1': 0, 'level_2': 0, 'level_3': 0, 'level_4': 0}, 'recent_certificates_30_days': 0, 'total_certificates': 0}",
+        "timestamp": "2025-07-05T01:38:39.371466"
+      },
+      {
+        "category": "Certificates",
+        "test_name": "Certificate Verification",
+        "result": "Endpoint working",
+        "status": "success",
+        "details": "Verification system operational",
+        "timestamp": "2025-07-05T01:38:39.374179"
+      }
+    ],
+    "Knowledge Base": [
+      {
+        "category": "Knowledge Base",
+        "test_name": "KB Stats",
+        "result": "Success",
+        "status": "success",
+        "details": "Resources: 5, Categories: 5",
+        "timestamp": "2025-07-05T01:38:39.380102"
+      },
+      {
+        "category": "Knowledge Base",
+        "test_name": "Video Stats",
+        "result": "Error: Expecting value: line 1 column 1 (char 0)",
+        "status": "error",
+        "details": null,
+        "timestamp": "2025-07-05T01:38:39.382450"
+      }
+    ],
+    "Performance": [
+      {
+        "category": "Performance",
+        "test_name": "Response Time /health",
+        "result": "2ms",
+        "status": "success",
+        "details": null,
+        "timestamp": "2025-07-05T01:38:39.384573"
+      },
+      {
+        "category": "Performance",
+        "test_name": "Response Time /api/courses",
+        "result": "8ms",
+        "status": "success",
+        "details": null,
+        "timestamp": "2025-07-05T01:38:39.392842"
+      },
+      {
+        "category": "Performance",
+        "test_name": "Response Time /api/quizzes",
+        "result": "7ms",
+        "status": "success",
+        "details": null,
+        "timestamp": "2025-07-05T01:38:39.400236"
+      },
+      {
+        "category": "Performance",
+        "test_name": "Response Time /api/certificates/stats",
+        "result": "5ms",
+        "status": "success",
+        "details": null,
+        "timestamp": "2025-07-05T01:38:39.405390"
+      },
+      {
+        "category": "Performance",
+        "test_name": "Response Time /api/knowledge/stats",
+        "result": "6ms",
+        "status": "success",
+        "details": null,
+        "timestamp": "2025-07-05T01:38:39.411007"
+      }
+    ]
+  }
+}

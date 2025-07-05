@@ -1,0 +1,29 @@
+[Unit]
+Description=Qryti Learn API Server
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/qryti-learn/backend
+Environment=PATH=/opt/qryti-learn/venv/bin
+ExecStart=/opt/qryti-learn/venv/bin/python -m src.main
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=qryti-learn-api
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/qryti-learn/backend/src/database
+ReadWritePaths=/opt/qryti-learn/certificates
+ReadWritePaths=/opt/qryti-learn/uploads
+
+[Install]
+WantedBy=multi-user.target

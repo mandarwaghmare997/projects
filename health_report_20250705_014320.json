@@ -1,0 +1,104 @@
+{
+  "timestamp": "2025-07-05T01:43:20.061161",
+  "overall_status": "healthy",
+  "system": {
+    "timestamp": "2025-07-05T01:43:20.025995",
+    "cpu": {
+      "usage_percent": 0.3,
+      "count": 4,
+      "load_avg": [
+        0.025390625,
+        0.1748046875,
+        0.19580078125
+      ]
+    },
+    "memory": {
+      "total": 4133244928,
+      "available": 1953038336,
+      "used": 1898897408,
+      "usage_percent": 52.7
+    },
+    "disk": {
+      "total": 40970727424,
+      "used": 7432953856,
+      "free": 33520996352,
+      "usage_percent": 18.1
+    },
+    "network": {
+      "bytes_sent": 10725765088,
+      "bytes_recv": 10809973586,
+      "packets_sent": 15078578,
+      "packets_recv": 15158290
+    }
+  },
+  "database": {
+    "timestamp": "2025-07-05T01:43:20.026867",
+    "status": "healthy",
+    "response_time_ms": 0.8025169372558594,
+    "database_size_bytes": 225280,
+    "table_counts": {
+      "users": 5,
+      "courses": 4,
+      "quizzes": 2,
+      "certificates": 0,
+      "knowledge_resources": 5
+    },
+    "total_records": 16
+  },
+  "api": {
+    "timestamp": "2025-07-05T01:43:20.026885",
+    "endpoints": {
+      "/api/health": {
+        "status_code": 200,
+        "response_time_ms": 5.05518913269043,
+        "status": "healthy",
+        "content_length": 8967
+      },
+      "/api/courses": {
+        "status_code": 200,
+        "response_time_ms": 10.885477066040039,
+        "status": "healthy",
+        "content_length": 1950
+      },
+      "/api/quizzes": {
+        "status_code": 200,
+        "response_time_ms": 7.34257698059082,
+        "status": "healthy",
+        "content_length": 973
+      },
+      "/api/certificates/stats": {
+        "status_code": 200,
+        "response_time_ms": 5.225419998168945,
+        "status": "healthy",
+        "content_length": 171
+      },
+      "/api/knowledge/stats": {
+        "status_code": 200,
+        "response_time_ms": 5.708217620849609,
+        "status": "healthy",
+        "content_length": 10005
+      }
+    },
+    "overall_status": "healthy",
+    "total_response_time": 34.216880798339844,
+    "successful_endpoints": 5,
+    "failed_endpoints": 0,
+    "average_response_time": 6.843376159667969
+  },
+  "alerts": [],
+  "metrics_summary": {
+    "system": {
+      "avg_cpu": 0.3,
+      "avg_memory": 52.7,
+      "avg_disk": 18.1
+    },
+    "api": {
+      "avg_response_time": 6.843376159667969,
+      "success_rate": 100.0
+    },
+    "database": {
+      "avg_response_time": 0.8025169372558594,
+      "uptime_percentage": 100.0
+    }
+  }
+}

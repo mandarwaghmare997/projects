@@ -1,0 +1,93 @@
+[
+  {
+    "test_name": "Health Check",
+    "status": "PASS",
+    "message": "Service healthy (5.63ms)",
+    "response_time": 5.63,
+    "timestamp": "2025-07-05T01:27:58.952416"
+  },
+  {
+    "test_name": "User Registration",
+    "status": "WARN",
+    "message": "Registration may already exist: Expected 201, got 409",
+    "response_time": 4.68,
+    "timestamp": "2025-07-05T01:27:58.957186"
+  },
+  {
+    "test_name": "User Login",
+    "status": "PASS",
+    "message": "Login successful (139.57ms)",
+    "response_time": 139.57,
+    "timestamp": "2025-07-05T01:27:59.096892"
+  },
+  {
+    "test_name": "Get Courses",
+    "status": "PASS",
+    "message": "Retrieved 4 courses (10.5ms)",
+    "response_time": 10.5,
+    "timestamp": "2025-07-05T01:27:59.107528"
+  },
+  {
+    "test_name": "Get Quizzes",
+    "status": "PASS",
+    "message": "Retrieved 2 quizzes (8.36ms)",
+    "response_time": 8.36,
+    "timestamp": "2025-07-05T01:27:59.116003"
+  },
+  {
+    "test_name": "Certificate Stats",
+    "status": "PASS",
+    "message": "Certificate stats retrieved (13.36ms)",
+    "response_time": 13.36,
+    "timestamp": "2025-07-05T01:27:59.129469"
+  },
+  {
+    "test_name": "Certificate Verification",
+    "status": "PASS",
+    "message": "Verification endpoint working (4.55ms)",
+    "response_time": 4.55,
+    "timestamp": "2025-07-05T01:27:59.134116"
+  },
+  {
+    "test_name": "Analytics Summary",
+    "status": "FAIL",
+    "message": "Failed to get analytics: Expected 200, got 401",
+    "response_time": 2.29,
+    "timestamp": "2025-07-05T01:27:59.136485"
+  },
+  {
+    "test_name": "Video Stats",
+    "status": "FAIL",
+    "message": "Failed to get video stats: Expecting value: line 1 column 1 (char 0)",
+    "response_time": 5.0,
+    "timestamp": "2025-07-05T01:27:59.141548"
+  },
+  {
+    "test_name": "Knowledge Base Stats",
+    "status": "PASS",
+    "message": "KB stats retrieved (62.51ms)",
+    "response_time": 62.51,
+    "timestamp": "2025-07-05T01:27:59.204256"
+  },
+  {
+    "test_name": "Admin Stats",
+    "status": "FAIL",
+    "message": "Admin security issue: Expected 401, got 200",
+    "response_time": 3.33,
+    "timestamp": "2025-07-05T01:27:59.207671"
+  },
+  {
+    "test_name": "Enterprise Organizations",
+    "status": "FAIL",
+    "message": "Enterprise security issue: Expected 401, got 403",
+    "response_time": 5.21,
+    "timestamp": "2025-07-05T01:27:59.212951"
+  },
+  {
+    "test_name": "Branding Settings",
+    "status": "FAIL",
+    "message": "Branding security issue: Expected 401, got 403",
+    "response_time": 3.69,
+    "timestamp": "2025-07-05T01:27:59.216702"
+  }
+]
